@@ -5,15 +5,17 @@
 
 ## Overview
 
-A comparative study of traditional machine learning (SVM, Random Forest) and deep learning (CNN) approaches for classifying audio signals into 10 musical genres using the GTZAN dataset.
+A comparative study of traditional machine learning (SVM, Random Forest) and deep learning (CNN) approaches for classifying audio signals into 10 musical genres using the GTZAN dataset. The project includes a complete ML pipeline (data processing, feature extraction, model training, evaluation) and a Flask web application for real-time genre prediction.
 
 ## Setup
+
+**Prerequisites:** Python 3.11+
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Place `archive.zip` (GTZAN dataset) in the project root directory.
+Place `archive.zip` (GTZAN dataset from Kaggle) in the project root directory before running the pipeline.
 
 ## Usage
 
@@ -22,48 +24,97 @@ Place `archive.zip` (GTZAN dataset) in the project root directory.
 python run_all.py
 ```
 
+This executes four phases sequentially:
+1. **Phase 1** — Data extraction, validation, and stratified train/val/test splitting
+2. **Phase 2** — Tabular feature engineering + mel-spectrogram generation
+3. **Phase 3** — Model training (SVM with GridSearchCV, Random Forest with GridSearchCV, CNN)
+4. **Phase 4** — Evaluation metrics, confusion matrices, feature importance, noise robustness
+
 ### Run individual phases
 ```bash
-python run_all.py --phase 1   # Data pipeline (extract, validate, split)
-python run_all.py --phase 2   # Feature engineering + mel-spectrogram generation
-python run_all.py --phase 3   # Model training (SVM, RF, CNN)
-python run_all.py --phase 4   # Evaluation, feature importance, noise robustness
+python run_all.py --phase 1   # Data pipeline
+python run_all.py --phase 2   # Feature engineering + mel-spectrograms
+python run_all.py --phase 3   # Model training
+python run_all.py --phase 4   # Evaluation and analysis
 ```
 
-### Launch the web demo
+### Web Application Demo
+
+A Flask-based web application is provided for real-time genre classification. It allows users to upload an audio file, select a model, and receive a predicted genre with confidence scores.
+
+**To run:**
+
 ```bash
 cd webapp
 python app.py
 ```
+
 Then open `http://localhost:5000` in your browser.
+
+**How to test:**
+1. Start the server with the command above
+2. In the browser, select a model (SVM, Random Forest, or CNN)
+3. Upload an audio file (supported formats: `.wav`, `.mp3`, `.flac`, `.ogg`)
+4. Click "Classify" to get the predicted genre and per-genre confidence scores
+
+A sample audio file (`alec_koff-blues-ballad-487408.mp3`) is included in the `webapp/` folder for testing purposes. Simply upload it through the web interface to see the classification output.
+
+**Note:** The trained models must be present in the `models/` directory before running the web app. Run the full pipeline first, or ensure the following files exist:
+- `models/svm_best.joblib`
+- `models/rf_best.joblib`
+- `models/cnn_best.keras`
+- `models/scaler.joblib`
+- `models/label_encoder.joblib`
 
 ## Project Structure
 
 ```
-config.py                 # Central configuration
-run_all.py                # Master pipeline orchestrator
+config.py                    # Central configuration (paths, hyperparameters)
+run_all.py                   # Master pipeline orchestrator
+requirements.txt             # Python dependencies
 src/
-  data_pipeline.py        # Phase 1: data extraction, validation, splitting
-  feature_engineering.py   # Phase 2: tabular feature preparation
-  mel_spectrogram.py       # Phase 2: mel-spectrogram generation
-  traditional_ml.py        # Phase 3a: SVM + Random Forest
-  cnn_model.py             # Phase 3b: CNN architecture
-  train_cnn.py             # Phase 3b: CNN training
-  evaluate.py              # Phase 4: evaluation metrics
-  feature_importance.py    # Phase 4: feature importance analysis
-  noise_robustness.py      # Phase 4: noise experiment
+    data_pipeline.py         # Phase 1: data extraction, validation, splitting
+    feature_engineering.py   # Phase 2: tabular feature preparation
+    mel_spectrogram.py       # Phase 2: mel-spectrogram generation
+    traditional_ml.py        # Phase 3a: SVM + Random Forest training
+    cnn_model.py             # Phase 3b: CNN architecture definition
+    train_cnn.py             # Phase 3b: CNN training loop
+    evaluate.py              # Phase 4: evaluation metrics + confusion matrices
+    feature_importance.py    # Phase 4: Gini + permutation feature importance
+    noise_robustness.py      # Phase 4: noise degradation experiment
+    utils.py                 # Shared utility functions
 notebooks/
-  01_eda.ipynb             # Exploratory data analysis
-webapp/                    # Flask web application
-report/                    # IEEE LaTeX report
+    01_eda.ipynb             # Exploratory data analysis
+webapp/
+    app.py                   # Flask application entry point
+    inference.py             # Model loading and prediction logic
+    templates/               # HTML templates (index, result)
+    static/                  # CSS styles
+    alec_koff-blues-ballad-487408.mp3  # Sample audio for testing
+models/                      # Trained model artifacts (generated by pipeline)
+results/                     # Evaluation plots and metrics (generated by pipeline)
+report/
+    main.tex                 # IEEE LaTeX report source
+    references.bib           # BibTeX references
+    report.pdf               # Compiled report
 ```
 
 ## Dataset
 
-GTZAN: 1,000 audio tracks (10 genres x 100 tracks), 30 seconds each, 22,050 Hz WAV.
+**GTZAN:** 1,000 audio tracks (10 genres × 100 tracks), 30 seconds each, 22,050 Hz mono WAV.
 
-## Models
+Genres: blues, classical, country, disco, hip-hop, jazz, metal, pop, reggae, rock.
 
-- **SVM** (RBF/linear kernel) on hand-crafted audio features
-- **Random Forest** on hand-crafted audio features
-- **CNN** (4-block architecture) on log-mel spectrograms
+Source: [GTZAN on Kaggle](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification)
+
+## Models and Results
+
+| Model | Test Accuracy | F1 (Macro) |
+|---|---|---|
+| SVM (RBF kernel) | 72.0% | 0.719 |
+| Random Forest | 67.3% | 0.667 |
+| **CNN (majority vote)** | **78.7%** | **0.785** |
+
+- **SVM**: RBF kernel with C=100, trained on 57 hand-crafted audio features
+- **Random Forest**: 100 estimators, trained on 57 hand-crafted audio features
+- **CNN**: 4-block architecture (32→64→128→256 filters) with batch normalization, dropout, and SpecAugment, trained on 128×130 log-mel spectrograms

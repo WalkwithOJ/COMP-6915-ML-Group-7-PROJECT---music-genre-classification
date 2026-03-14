@@ -1,9 +1,6 @@
 # Virtual environment
 .venv/
 
-# Claude / AI tool artifacts
-.claude/
-
 # Large data files
 data/raw/
 data/processed/mel_spectrograms/
