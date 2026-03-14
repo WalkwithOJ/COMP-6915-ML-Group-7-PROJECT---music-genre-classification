@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Genre Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Music Genre Classifier</h1>
+        <p class="subtitle">Upload an audio file to predict its genre</p>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+            <div class="upload-area">
+                <label for="audio" class="upload-label">
+                    <span class="upload-icon">&#9835;</span>
+                    <span>Choose an audio file</span>
+                    <span class="formats">WAV, MP3, FLAC, OGG (max 50MB)</span>
+                </label>
+                <input type="file" id="audio" name="audio" accept=".wav,.mp3,.flac,.ogg" required>
+            </div>
+
+            <div class="model-select">
+                <label for="model">Classification Model:</label>
+                <select id="model" name="model">
+                    {% for model in models %}
+                    <option value="{{ model }}">{{ model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn">Classify Genre</button>
+        </form>
+    </div>
+
+    <script>
+        // Show selected filename
+        document.getElementById('audio').addEventListener('change', function() {
+            var label = document.querySelector('.upload-label span:first-of-type');
+            if (this.files.length > 0) {
+                label.textContent = this.files[0].name;
+            }
+        });
+    </script>
+</body>
+</html>

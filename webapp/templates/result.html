@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Genre Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+
+        <div class="result-card">
+            <div class="genre-name">{{ result.genre | capitalize }}</div>
+            <div class="confidence">
+                Confidence: {{ "%.1f" | format(result.confidence * 100) }}%
+            </div>
+            <div class="model-info">Model: {{ result.model_used }}</div>
+        </div>
+
+        <h2>All Genre Probabilities</h2>
+        <div class="probabilities">
+            {% for genre, prob in result.probabilities | dictsort(by='value', reverse=true) %}
+            <div class="prob-row">
+                <span class="prob-label">{{ genre | capitalize }}</span>
+                <div class="prob-bar-bg">
+                    <div class="prob-bar" style="width: {{ prob * 100 }}%"></div>
+                </div>
+                <span class="prob-value">{{ "%.1f" | format(prob * 100) }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <a href="/" class="btn">Classify Another</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+# Virtual environment
+.venv/
+
+# Claude / AI tool artifacts
+.claude/
+
+# Large data files
+data/raw/
+data/processed/mel_spectrograms/
+archive.zip
+
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environment
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

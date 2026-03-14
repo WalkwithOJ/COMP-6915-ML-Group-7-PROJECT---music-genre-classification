@@ -1,0 +1,18 @@
+{
+  "svm": {
+    "best_params": {
+      "C": 100,
+      "gamma": "scale",
+      "kernel": "rbf"
+    },
+    "cv_f1_macro": 0.5611648452371683
+  },
+  "rf": {
+    "best_params": {
+      "max_depth": null,
+      "min_samples_split": 5,
+      "n_estimators": 100
+    },
+    "cv_f1_macro": 0.5425844914076184
+  }
+}

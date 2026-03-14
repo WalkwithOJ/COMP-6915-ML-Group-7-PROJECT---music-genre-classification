@@ -1,0 +1,4 @@
+Model,Accuracy,F1 (Macro),F1 (Weighted)
+SVM,0.7200,0.7188,0.7188
+Random Forest,0.6733,0.6670,0.6670
+CNN (Majority Vote),0.7867,0.7847,0.7847
