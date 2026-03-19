@@ -1,7 +1,7 @@
 # Music Genre Classification (Audio Analysis)
 
 **COMP-6915: Machine Learning — Winter 2026**
-**Group 07:** Joshua Oseimobor (202492785), Covenant Akisanmi (202582097), Cletus Chiemerie (202492457)
+**Group 07:** Joshua Oseimobor , Covenant Akisanmi , Cletus Chiemerie
 
 ## Overview
 
