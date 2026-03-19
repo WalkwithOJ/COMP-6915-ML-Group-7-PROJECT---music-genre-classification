@@ -5,7 +5,8 @@
 
 ## Overview
 
-A comparative study of traditional machine learning (SVM, Random Forest) and deep learning (CNN) approaches for classifying audio signals into 10 musical genres using the GTZAN dataset. The project includes a complete ML pipeline (data processing, feature extraction, model training, evaluation) and a Flask web application for real-time genre prediction.
+A comparative study of traditional machine learning (SVM, Random Forest) and deep learning (CNN) approaches for classifying audio signals into 10 musical genres using the GTZAN dataset-- https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification.
+The project includes a complete ML pipeline (data processing, feature extraction, model training, evaluation) and a Flask web application for real-time genre prediction.
 
 ## Setup
 
