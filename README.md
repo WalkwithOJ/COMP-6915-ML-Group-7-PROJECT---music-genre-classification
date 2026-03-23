@@ -109,6 +109,8 @@ Genres: blues, classical, country, disco, hip-hop, jazz, metal, pop, reggae, roc
 
 Source: [GTZAN on Kaggle](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification)
 
+**Download:** [Google Drive](https://drive.google.com/file/d/136iOVhWvAa6pWUC5coJ5WaZHfWMxd_Pc/view?usp=sharing)
+
 ## Models and Results
 
 | Model | Test Accuracy | F1 (Macro) |
